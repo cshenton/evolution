@@ -4,9 +4,9 @@ import "math/rand"
 
 var scale = 1.0
 
-// perturbation deterministically generates a slice p of parameter perturbations
+// Rand deterministically generates a slice p of parameter perturbations
 // of length n using random seed s.
-func perturbation(s int64, n int) (p []float64) {
+func Rand(s int64, n int) (p []float64) {
 	p = make([]float64, n)
 
 	r := rand.New(rand.NewSource(s))
