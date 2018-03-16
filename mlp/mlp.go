@@ -6,12 +6,6 @@ import (
 	"fmt"
 )
 
-// Activation is an activation function like tanh or relu.
-type Activation func(float64) float64
-
-// Initializer is a weight initialization function.
-type Initializer func(n int) []float64
-
 // MLP is a multilayer perceptron.
 type MLP struct {
 	Input       int
