@@ -10,5 +10,7 @@ before_install:
 
 script:
   - go test -v -coverprofile=.coverprofile ./...
+
+after_success:
   - $GOPATH/bin/gover
   - $GOPATH/bin/goveralls -coverprofile=gover.coverprofile -service=travis-ci
