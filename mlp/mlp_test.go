@@ -63,3 +63,41 @@ func TestNewErrs(t *testing.T) {
 		})
 	}
 }
+
+func TestCopyMLP(t *testing.T) {
+	m, err := mlp.New(
+		[]int{5, 10, 5},
+		[]mlp.Activation{mlp.Identity, mlp.Identity},
+		mlp.Zeros,
+	)
+	if err != nil {
+		t.Fatalf("expected error in New: %v", err)
+	}
+
+	c := m.Copy()
+	if c == m {
+		t.Error("pointer address of copy is the same as source")
+	}
+	if c.Input != m.Input {
+		t.Errorf("expected copied input %v, but got %v", m.Input, c.Input)
+	}
+	if c.Output != m.Output {
+		t.Errorf("expected copied output %v, but got %v", m.Output, c.Output)
+	}
+	for i := range m.Hiddens {
+		if c.Hiddens[i] != m.Hiddens[i] {
+			t.Errorf(
+				"expected copied hidden %v at position %v, but got %v",
+				m.Hiddens[i], i, c.Hiddens[i],
+			)
+		}
+	}
+	for i := range m.Weights {
+		if c.Weights[i] != m.Weights[i] {
+			t.Errorf(
+				"expected copied weight %v at position %v, but got %v",
+				m.Weights[i], i, c.Weights[i],
+			)
+		}
+	}
+}
