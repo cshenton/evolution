@@ -65,19 +65,17 @@ func (m *MLP) Forward(in []float64) (out []float64, err error) {
 		err := fmt.Errorf("in must have length %v, but was length %v", m.Sizes[0], len(in))
 		return nil, err
 	}
-	p := make([]mat.Matrix, len(m.Sizes))
-	p[0] = mat.NewDense(1, len(in), in)
-	d := m.Mats()
-	for i := range d {
-		p[i+1] = d[i]
+	prev := mat.NewDense(1, len(in), in)
+	for i, w := range m.Mats() {
+		next := mat.NewDense(1, m.Sizes[i+1], nil)
+		next.Mul(prev, w)
+		next.Apply(func(i, j int, v float64) float64 { return m.Activations[i](v) }, next)
+		prev = next
 	}
-
-	outMat := mat.NewDense(1, m.Sizes[len(m.Sizes)-1], nil)
-	outMat.Product(p...)
 
 	out = make([]float64, m.Sizes[len(m.Sizes)-1])
 	for i := range out {
-		out[i] = outMat.At(1, i)
+		out[i] = prev.At(1, i)
 	}
 	return out, nil
 }

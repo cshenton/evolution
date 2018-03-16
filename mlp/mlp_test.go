@@ -99,7 +99,11 @@ func TestMLPMats(t *testing.T) {
 	}
 }
 
-func TestCopyMLP(t *testing.T) {
+func TestMLPForward(t *testing.T) {
+
+}
+
+func TestMLPCopy(t *testing.T) {
 	m, err := mlp.New(
 		[]int{5, 10, 5},
 		[]mlp.Activation{mlp.Identity, mlp.Identity},
