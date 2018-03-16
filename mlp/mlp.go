@@ -59,7 +59,8 @@ func (m *MLP) Mats() (d []*mat.Dense) {
 	return d
 }
 
-// Forward makes a forward pass through the MLP.
+// Forward makes a forward pass through the MLP, sequentially multiplying by
+// each weight matrix and applying each activation.
 func (m *MLP) Forward(in []float64) (out []float64, err error) {
 	if len(in) != m.Sizes[0] {
 		err := fmt.Errorf("in must have length %v, but was length %v", m.Sizes[0], len(in))
@@ -74,8 +75,10 @@ func (m *MLP) Forward(in []float64) (out []float64, err error) {
 	}
 
 	out = make([]float64, m.Sizes[len(m.Sizes)-1])
+	fmt.Println(len(out))
+	fmt.Println(prev.Dims())
 	for i := range out {
-		out[i] = prev.At(1, i)
+		out[i] = prev.At(0, i)
 	}
 	return out, nil
 }

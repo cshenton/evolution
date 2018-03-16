@@ -100,7 +100,48 @@ func TestMLPMats(t *testing.T) {
 }
 
 func TestMLPForward(t *testing.T) {
+	exp := []float64{0, 0, 0}
+	m, err := mlp.New(
+		[]int{5, 10, 3},
+		[]mlp.Activation{mlp.Identity, mlp.Identity},
+		mlp.Zeros,
+	)
+	if err != nil {
+		t.Fatalf("expected error in New: %v", err)
+	}
 
+	out, err := m.Forward([]float64{5, 3, 2, 4, 2})
+	if err != nil {
+		t.Errorf("unexpected error in Forward: %v", err)
+	}
+
+	if len(out) != len(exp) {
+		t.Fatalf("expected len %v result, but it was len %v", len(exp), len(out))
+	}
+	for i := range exp {
+		if exp[i] != out[i] {
+			t.Errorf("expected %v at position %v, but got %v", exp[i], i, out[i])
+		}
+	}
+}
+
+func TestMLPForwardErrs(t *testing.T) {
+	m, err := mlp.New(
+		[]int{5, 10, 5},
+		[]mlp.Activation{mlp.Identity, mlp.Identity},
+		mlp.Zeros,
+	)
+	if err != nil {
+		t.Fatalf("expected error in New: %v", err)
+	}
+
+	out, err := m.Forward([]float64{5, 3, 2, 4})
+	if err == nil {
+		t.Error("expected error in Forward, but it was nil")
+	}
+	if out != nil {
+		t.Errorf("expected nil output, but it was %v", out)
+	}
 }
 
 func TestMLPCopy(t *testing.T) {
