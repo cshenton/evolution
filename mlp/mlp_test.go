@@ -25,11 +25,10 @@ func TestNew(t *testing.T) {
 		if err != nil {
 			t.Fatalf("unexpected error in New: %v", err)
 		}
-		if m.Input != tc.sizes[0] {
-			t.Errorf("expected %v input units, but got %v", tc.sizes[0], m.Input)
-		}
-		if m.Output != tc.sizes[len(tc.sizes)-1] {
-			t.Errorf("expected %v output units, but got %v", tc.sizes[len(tc.sizes)-1], m.Output)
+		for i := range tc.sizes {
+			if m.Sizes[i] != tc.sizes[i] {
+				t.Errorf("expected size %v at position %v, but got %v", tc.sizes[i], i, m.Sizes[i])
+			}
 		}
 		if len(m.Weights) != tc.len {
 			t.Errorf("expected %v weights, but got %v", tc.len, len(m.Weights))
@@ -64,6 +63,42 @@ func TestNewErrs(t *testing.T) {
 	}
 }
 
+func TestMLPMats(t *testing.T) {
+	tt := []struct {
+		name        string
+		sizes       []int
+		activations []mlp.Activation
+		init        mlp.Initializer
+	}{
+		{"10 hidden", []int{5, 10, 2}, []mlp.Activation{mlp.Identity, mlp.Identity}, mlp.Zeros},
+	}
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+			m, err := mlp.New(
+				tc.sizes,
+				tc.activations,
+				tc.init,
+			)
+			if err != nil {
+				t.Fatalf("unexpected error in New: %v", err)
+			}
+			d := m.Mats()
+			if len(d) != len(tc.sizes)-1 {
+				t.Errorf("expected %v weight mats, but got %v", len(tc.sizes)-1, len(d))
+			}
+			for i := range d {
+				r, c := d[i].Dims()
+				if r != tc.sizes[i] {
+					t.Errorf("expected mat %v to have %v rows, but it had %v", i, tc.sizes[i], r)
+				}
+				if c != tc.sizes[i+1] {
+					t.Errorf("expected mat %v to have %v columns, but it had %v", i, tc.sizes[i+1], c)
+				}
+			}
+		})
+	}
+}
+
 func TestCopyMLP(t *testing.T) {
 	m, err := mlp.New(
 		[]int{5, 10, 5},
@@ -78,17 +113,11 @@ func TestCopyMLP(t *testing.T) {
 	if c == m {
 		t.Error("pointer address of copy is the same as source")
 	}
-	if c.Input != m.Input {
-		t.Errorf("expected copied input %v, but got %v", m.Input, c.Input)
-	}
-	if c.Output != m.Output {
-		t.Errorf("expected copied output %v, but got %v", m.Output, c.Output)
-	}
-	for i := range m.Hiddens {
-		if c.Hiddens[i] != m.Hiddens[i] {
+	for i := range m.Sizes {
+		if c.Sizes[i] != m.Sizes[i] {
 			t.Errorf(
-				"expected copied hidden %v at position %v, but got %v",
-				m.Hiddens[i], i, c.Hiddens[i],
+				"expected copied size %v at position %v, but got %v",
+				m.Sizes[i], i, c.Sizes[i],
 			)
 		}
 	}
