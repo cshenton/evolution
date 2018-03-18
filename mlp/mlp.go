@@ -1,4 +1,5 @@
-// Package mlp implements a simple multilayer perceptron
+// Package mlp implements a simple multilayer perceptron in addition to basic
+// interfaces for describing one, such as activations and initializers.
 package mlp
 
 import (
