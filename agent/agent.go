@@ -4,7 +4,7 @@
 package agent
 
 import (
-	"github.com/cshenton/evolution/server"
+	"github.com/cshenton/evolution/server/pb"
 )
 
 // Agent is an evolutionary learning agent.
@@ -16,6 +16,6 @@ type Agent interface {
 
 	// Copying and serialisation
 	Copy() (a Agent)
-	ToProto() (pb server.Agent, err error)
-	FromProto(server.Agent) (err error)
+	ToProto() (p *pb.Agent, err error)
+	FromProto(*pb.Agent) (err error)
 }

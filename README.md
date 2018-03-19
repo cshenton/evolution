@@ -15,7 +15,7 @@ Protocol buffers are generated from `/protos` into their respective packages so
 from this folder:
 
 ```bash
-protoc -I protos/ protos/server.proto --go_out=plugins=grpc:server
+protoc -I protos/ protos/server.proto --go_out=plugins=grpc:server/pb
 protoc -I protos/ protos/mlp.proto --go_out=agent/mlp/pb
-# etc...
+# etc... protoc -I protos/ protos/<agent_name>.proto --go_out=agent/<agent_name>/pb
 ```
