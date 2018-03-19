@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package evolution.mlp;
+
+// Activation is a valid activation function
+enum Activation {
+  IDENTITY = 0;  // The identity function
+  TANH = 1;      // Hypergeometric tan
+  RELU = 2;      // Recitified linear unit
+}
+
+// MLP contains the weights and specification for a multi-layer perceptron.
+message MLP {
+  repeated int32 sizes = 1;
+  repeated Activation activations = 2;
+  repeated double weights = 3;
+}

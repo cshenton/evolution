@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package evolution;
+
+// The evolution service is used to communicate fitnesses between servers.
+service Evolution {
+  // Join returns the server's current MLP, used to bootstrap new servers.
+  rpc Join (google.protobuf.Empty) returns (Agent) {}
+  // Notify tells the server about a new result.
+  rpc Notify (Result) returns (google.protobuf.Empty) {}
+}
+
+enum AgentType {
+  MLP = 0;  // Multi-Layer perceptron
+}
+
+// Agent is a self describing message containing the data required to construct
+// a concrete type that fulfills the Agent interface.
+message Agent {
+  AgentType agent_type = 1;
+  google.protobuf.Any message = 2;
+}
+
+// Result contains the fitness of a perturbation, and the seed used to generate it.
+message Result {
+  int64 seed = 1;
+  double fitness = 2;
+}
