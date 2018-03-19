@@ -3,7 +3,7 @@ package mlp_test
 import (
 	"testing"
 
-	"github.com/cshenton/openai-evolution/mlp"
+	"github.com/cshenton/evolution/agent/mlp"
 )
 
 func TestNew(t *testing.T) {
