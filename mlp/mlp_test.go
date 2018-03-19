@@ -14,7 +14,7 @@ func TestNew(t *testing.T) {
 		init        mlp.Initializer
 		len         int
 	}{
-		{"10 hidden", []int{5, 10, 2}, []mlp.Activation{mlp.Identity, mlp.Identity}, mlp.Zeros, 70},
+		{"10 hidden", []int{5, 10, 2}, []mlp.Activation{mlp.IDENTITY, mlp.IDENTITY}, mlp.Zeros, 70},
 	}
 	for _, tc := range tt {
 		m, err := mlp.New(
@@ -43,8 +43,8 @@ func TestNewErrs(t *testing.T) {
 		activations []mlp.Activation
 		init        mlp.Initializer
 	}{
-		{"too few layers", []int{1, 1}, []mlp.Activation{mlp.Identity, mlp.Identity}, mlp.Zeros},
-		{"layer, activation mismatch", []int{1, 2, 1}, []mlp.Activation{mlp.Identity}, mlp.Zeros},
+		{"too few layers", []int{1, 1}, []mlp.Activation{mlp.IDENTITY, mlp.IDENTITY}, mlp.Zeros},
+		{"layer, activation mismatch", []int{1, 2, 1}, []mlp.Activation{mlp.IDENTITY}, mlp.Zeros},
 	}
 	for _, tc := range tt {
 		t.Run(tc.name, func(t *testing.T) {
@@ -70,7 +70,7 @@ func TestMLPMats(t *testing.T) {
 		activations []mlp.Activation
 		init        mlp.Initializer
 	}{
-		{"10 hidden", []int{5, 10, 2}, []mlp.Activation{mlp.Identity, mlp.Identity}, mlp.Zeros},
+		{"10 hidden", []int{5, 10, 2}, []mlp.Activation{mlp.IDENTITY, mlp.IDENTITY}, mlp.Zeros},
 	}
 	for _, tc := range tt {
 		t.Run(tc.name, func(t *testing.T) {
@@ -103,7 +103,7 @@ func TestMLPForward(t *testing.T) {
 	exp := []float64{0, 0, 0}
 	m, err := mlp.New(
 		[]int{5, 10, 3},
-		[]mlp.Activation{mlp.Identity, mlp.Identity},
+		[]mlp.Activation{mlp.IDENTITY, mlp.IDENTITY},
 		mlp.Zeros,
 	)
 	if err != nil {
@@ -128,7 +128,7 @@ func TestMLPForward(t *testing.T) {
 func TestMLPForwardErrs(t *testing.T) {
 	m, err := mlp.New(
 		[]int{5, 10, 5},
-		[]mlp.Activation{mlp.Identity, mlp.Identity},
+		[]mlp.Activation{mlp.IDENTITY, mlp.IDENTITY},
 		mlp.Zeros,
 	)
 	if err != nil {
@@ -147,7 +147,7 @@ func TestMLPForwardErrs(t *testing.T) {
 func TestMLPCopy(t *testing.T) {
 	m, err := mlp.New(
 		[]int{5, 10, 5},
-		[]mlp.Activation{mlp.Identity, mlp.Identity},
+		[]mlp.Activation{mlp.IDENTITY, mlp.IDENTITY},
 		mlp.Zeros,
 	)
 	if err != nil {

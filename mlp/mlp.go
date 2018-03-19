@@ -60,6 +60,15 @@ func (m *MLP) Mats() (d []*mat.Dense) {
 	return d
 }
 
+// activationFuncs returns this MLP's activation funcs.
+func (m *MLP) activationFuncs() (f []ActivationFunc) {
+	f = make([]ActivationFunc, len(m.Activations))
+	for i, a := range m.Activations {
+		f[i] = a.Func()
+	}
+	return f
+}
+
 // Forward makes a forward pass through the MLP, sequentially multiplying by
 // each weight matrix and applying each activation.
 func (m *MLP) Forward(in []float64) (out []float64, err error) {
@@ -67,11 +76,12 @@ func (m *MLP) Forward(in []float64) (out []float64, err error) {
 		err := fmt.Errorf("in must have length %v, but was length %v", m.Sizes[0], len(in))
 		return nil, err
 	}
+	afuncs := m.activationFuncs()
 	prev := mat.NewDense(1, len(in), in)
 	for i, w := range m.Mats() {
 		next := mat.NewDense(1, m.Sizes[i+1], nil)
 		next.Mul(prev, w)
-		next.Apply(func(i, j int, v float64) float64 { return m.Activations[i](v) }, next)
+		next.Apply(func(i, j int, v float64) float64 { return afuncs[i](v) }, next)
 		prev = next
 	}
 
