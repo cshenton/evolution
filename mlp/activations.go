@@ -3,7 +3,7 @@ package mlp
 import "math"
 
 // Activation is a reference to an activation function
-type Activation int32
+type Activation int
 
 const (
 	// IDENTITY is the identity function

@@ -16,5 +16,24 @@ func Join(address string) (m *mlp.MLP, err error) {
 		return nil, err
 	}
 	c := NewSwarmClient(conn)
-	out := c.Join(context.Background(), &empty.Empty{})
+	out, err := c.Join(context.Background(), &empty.Empty{})
+	if err != nil {
+		return nil, err
+	}
+
+	s := make([]int, len(out.Sizes))
+	for i := range s {
+		s[i] = int(out.Sizes[i])
+	}
+	a := make([]mlp.Activation, len(out.Activations))
+	for i := range a {
+		a[i] = mlp.Activation(out.Activations[i])
+	}
+
+	m = &mlp.MLP{
+		Sizes:       s,
+		Activations: a,
+		Weights:     out.Weights,
+	}
+	return m, nil
 }
