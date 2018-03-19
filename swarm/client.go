@@ -37,3 +37,19 @@ func Join(address string) (m *mlp.MLP, err error) {
 	}
 	return m, nil
 }
+
+// Notify notifies the specified server of the result of a model evaluation.
+func Notify(seed int64, fitness float64, address string) (err error) {
+	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	if err != nil {
+		return err
+	}
+	c := NewSwarmClient(conn)
+
+	in := &Result{
+		Seed:    seed,
+		Fitness: fitness,
+	}
+	_, err = c.Notify(context.Background(), in)
+	return err
+}
