@@ -16,6 +16,6 @@ from this folder:
 
 ```bash
 protoc -I protos/ protos/server.proto --go_out=plugins=grpc:server
-protoc -I protos/ protos/mlp.proto --go_out=agent/mlp
+protoc -I protos/ protos/mlp.proto --go_out=agent/mlp/pb
 # etc...
 ```

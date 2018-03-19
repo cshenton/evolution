@@ -16,6 +16,6 @@ type Agent interface {
 
 	// Copying and serialisation
 	Copy() (a Agent)
-	ToProto() (pb server.Agent)
-	FromProto(server.Agent)
+	ToProto() (pb server.Agent, err error)
+	FromProto(server.Agent) (err error)
 }
