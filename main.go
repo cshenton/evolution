@@ -12,6 +12,20 @@ const (
 	copiesBuff   = 10
 )
 
+func toAny(pb Message) (a &any.Any, err error) {
+	typeUrl, _ := "github.com/cshenton/evolution/" + proto.MessageName(pb),
+	value, _ := proto.Marshal(pb)
+	a = &any.Any{
+		TypeUrl: typeUrl,
+		Value:   value,
+	}
+	return a
+}
+
+func fromAny(a &any.Any) (ag Agent, err error) {
+
+}
+
 func main() {
 	// members.Join() ...
 	members := []string{"127.0.0.1"}

@@ -9,10 +9,13 @@ Replication of the OpenAI [Evolution Strategies](https://blog.openai.com/evoluti
 
 Uses a slightly different, homogenous network architecture, rather than a redis
 cluster. Each member of the cluster uses gossip to maintain a memberlist, then
-directly communicates over gRPC (see `/swarm`).
+directly communicates over gRPC.
 
-To generate the server and client stubs:
+Protocol buffers are generated from `/protos` into their respective packages so
+from this folder:
 
 ```bash
-protoc -I swarm/ swarm/swarm.proto --go_out=plugins=grpc:swarm
+protoc -I protos/ protos/server.proto --go_out=plugins=grpc:server
+protoc -I protos/ protos/mlp.proto --go_out=agent/mlp
+# etc...
 ```

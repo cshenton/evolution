@@ -1,8 +1,11 @@
 syntax = "proto3";
 
+import "google/protobuf/any.proto";
 import "google/protobuf/empty.proto";
 
-package evolution;
+package evolution.server;
+
+option go_package = "server";
 
 // The evolution service is used to communicate fitnesses between servers.
 service Evolution {
@@ -12,14 +15,9 @@ service Evolution {
   rpc Notify (Result) returns (google.protobuf.Empty) {}
 }
 
-enum AgentType {
-  MLP = 0;  // Multi-Layer perceptron
-}
-
 // Agent is a self describing message containing the data required to construct
 // a concrete type that fulfills the Agent interface.
 message Agent {
-  AgentType agent_type = 1;
   google.protobuf.Any message = 2;
 }
 
