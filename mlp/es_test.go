@@ -33,7 +33,7 @@ func TestMLPPerturb(t *testing.T) {
 
 	m, err := mlp.New(
 		[]int{5, 10, 3},
-		[]mlp.Activation{mlp.Identity, mlp.Identity},
+		[]mlp.Activation{mlp.IDENTITY, mlp.IDENTITY},
 		mlp.Zeros,
 	)
 	if err != nil {
@@ -55,7 +55,7 @@ func TestMLPUpdate(t *testing.T) {
 
 	m, err := mlp.New(
 		[]int{5, 10, 3},
-		[]mlp.Activation{mlp.Identity, mlp.Identity},
+		[]mlp.Activation{mlp.IDENTITY, mlp.IDENTITY},
 		mlp.Zeros,
 	)
 	if err != nil {

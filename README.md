@@ -4,6 +4,15 @@
 
 Replication of the OpenAI [Evolution Strategies](https://blog.openai.com/evolution-strategies/) paper in Golang.
 
+
+## Intra-cluster communication
+
 Uses a slightly different, homogenous network architecture, rather than a redis
 cluster. Each member of the cluster uses gossip to maintain a memberlist, then
-directly communicates over gRPC (namespaced swarm).
+directly communicates over gRPC (see `/swarm`).
+
+To generate the server and client stubs:
+
+```bash
+protoc -I swarm/ swarm/swarm.proto --go_out=plugins=grpc:swarm
+```
