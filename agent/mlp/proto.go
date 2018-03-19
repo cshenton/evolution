@@ -49,10 +49,8 @@ func (m *MLP) FromProto(p *server_pb.Agent) (err error) {
 	for i := range s {
 		s[i] = int(mp.Sizes[i])
 	}
-	m = &MLP{
-		Sizes:       s,
-		Activations: a,
-		Weights:     mp.Weights,
-	}
+	m.Sizes = s
+	m.Activations = a
+	m.Weights = mp.Weights
 	return nil
 }
