@@ -14,6 +14,16 @@ type Server struct {
 	copyResp <-chan *mlp.MLP
 }
 
+// NewServer creates a new server with nil channels.
+func NewServer() (s *Server) {
+	s = &Server{
+		result:   nil,
+		copyReq:  nil,
+		copyResp: nil,
+	}
+	return s
+}
+
 // Join requests a copy of the MLP on copyReq, then gets the copy from copyResp.
 func (s *Server) Join(c context.Context, e *empty.Empty) (m *MLP, err error) {
 	s.copyReq <- true
