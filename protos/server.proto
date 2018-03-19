@@ -18,7 +18,7 @@ service Evolution {
 // Agent is a self describing message containing the data required to construct
 // a concrete type that fulfills the Agent interface.
 message Agent {
-  google.protobuf.Any message = 2;
+  google.protobuf.Any message = 1;
 }
 
 // Result contains the fitness of a perturbation, and the seed used to generate it.
