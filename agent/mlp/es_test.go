@@ -4,7 +4,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/cshenton/openai-evolution/mlp"
+	"github.com/cshenton/evolution/agent/mlp"
 )
 
 func TestRand(t *testing.T) {

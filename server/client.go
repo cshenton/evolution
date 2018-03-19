@@ -1,41 +1,29 @@
-package swarm
+package server
 
 import (
 	"context"
 
-	"github.com/cshenton/openai-evolution/mlp"
+	"github.com/cshenton/evolution/agent"
+	"github.com/cshenton/evolution/server/pb"
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
 )
 
 // Join will call the bootstrap rpc on the specified server, and
-// return a reconstructed MLP.
-func Join(address string) (m *mlp.MLP, err error) {
+// then apply the current configuration to the supplied agent.
+func Join(a agent.Agent, address string) (err error) {
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
-		return nil, err
+		return err
 	}
-	c := NewSwarmClient(conn)
+	c := pb.NewEvolutionClient(conn)
 	out, err := c.Join(context.Background(), &empty.Empty{})
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	s := make([]int, len(out.Sizes))
-	for i := range s {
-		s[i] = int(out.Sizes[i])
-	}
-	a := make([]mlp.Activation, len(out.Activations))
-	for i := range a {
-		a[i] = mlp.Activation(out.Activations[i])
-	}
-
-	m = &mlp.MLP{
-		Sizes:       s,
-		Activations: a,
-		Weights:     out.Weights,
-	}
-	return m, nil
+	err = a.FromProto(out)
+	return err
 }
 
 // Notify notifies the specified server of the result of a model evaluation.
@@ -44,9 +32,9 @@ func Notify(seed int64, fitness float64, address string) (err error) {
 	if err != nil {
 		return err
 	}
-	c := NewSwarmClient(conn)
+	c := pb.NewEvolutionClient(conn)
 
-	in := &Result{
+	in := &pb.Result{
 		Seed:    seed,
 		Fitness: fitness,
 	}

@@ -3,7 +3,8 @@ package mlp_test
 import (
 	"testing"
 
-	"github.com/cshenton/openai-evolution/mlp"
+	"github.com/cshenton/evolution/agent"
+	"github.com/cshenton/evolution/agent/mlp"
 )
 
 func TestNew(t *testing.T) {
@@ -154,7 +155,7 @@ func TestMLPCopy(t *testing.T) {
 		t.Fatalf("expected error in New: %v", err)
 	}
 
-	c := m.Copy()
+	c := m.Copy().(*mlp.MLP) // type assert so we can check the weights, etc.
 	if c == m {
 		t.Error("pointer address of copy is the same as source")
 	}
@@ -174,4 +175,9 @@ func TestMLPCopy(t *testing.T) {
 			)
 		}
 	}
+}
+
+func TestMLPAgent(t *testing.T) {
+	// This will force a compilation failure if *mlp.MLP doesn't implement agent.Agent
+	_ = agent.Agent(&mlp.MLP{})
 }

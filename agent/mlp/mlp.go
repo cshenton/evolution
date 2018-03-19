@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/cshenton/evolution/agent"
 	"gonum.org/v1/gonum/mat"
 )
 
@@ -95,20 +96,20 @@ func (m *MLP) Forward(in []float64) (out []float64, err error) {
 }
 
 // Copy makes a deep copy of the target MLP.
-func (m *MLP) Copy() (c *MLP) {
+func (m *MLP) Copy() (a agent.Agent) {
 	s := make([]int, len(m.Sizes))
 	copy(s, m.Sizes)
 
-	a := make([]Activation, len(m.Activations))
-	copy(a, m.Activations)
+	act := make([]Activation, len(m.Activations))
+	copy(act, m.Activations)
 
 	w := make([]float64, len(m.Weights))
 	copy(w, m.Weights)
 
-	c = &MLP{
+	a = agent.Agent(&MLP{
 		Sizes:       s,
-		Activations: a,
+		Activations: act,
 		Weights:     w,
-	}
-	return c
+	})
+	return a
 }
