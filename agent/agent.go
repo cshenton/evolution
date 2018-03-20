@@ -4,7 +4,7 @@
 package agent
 
 import (
-	"github.com/cshenton/evolution/server/pb"
+	"github.com/cshenton/evolution/server/proto"
 )
 
 // Agent is an evolutionary learning agent.

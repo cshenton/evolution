@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/cshenton/evolution/agent"
-	"github.com/cshenton/evolution/server/pb"
+	"github.com/cshenton/evolution/server/proto"
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
 )
@@ -16,7 +16,7 @@ func Join(a agent.Agent, address string) (err error) {
 	if err != nil {
 		return err
 	}
-	c := pb.NewEvolutionClient(conn)
+	c := proto.NewEvolutionClient(conn)
 	out, err := c.Join(context.Background(), &empty.Empty{})
 	if err != nil {
 		return err
@@ -32,9 +32,9 @@ func Notify(seed int64, fitness float64, address string) (err error) {
 	if err != nil {
 		return err
 	}
-	c := pb.NewEvolutionClient(conn)
+	c := proto.NewEvolutionClient(conn)
 
-	in := &pb.Result{
+	in := &proto.Result{
 		Seed:    seed,
 		Fitness: fitness,
 	}

@@ -5,7 +5,7 @@ import (
 
 	"github.com/cshenton/evolution/agent"
 	"github.com/cshenton/evolution/environment"
-	"github.com/cshenton/evolution/server/pb"
+	"github.com/cshenton/evolution/server/proto"
 	"github.com/golang/protobuf/ptypes/empty"
 )
 
@@ -28,7 +28,7 @@ func NewServer() (s *Server) {
 
 // Join requests a copy of the current Agent, then returns a protocol buffer
 // representing it.
-func (s *Server) Join(c context.Context, e *empty.Empty) (a *pb.Agent, err error) {
+func (s *Server) Join(c context.Context, e *empty.Empty) (a *proto.Agent, err error) {
 	s.copyReq <- true
 	ag := <-s.copyResp
 	a, err = ag.ToProto()
@@ -36,7 +36,7 @@ func (s *Server) Join(c context.Context, e *empty.Empty) (a *pb.Agent, err error
 }
 
 // Notify pushes the result to the result channel.
-func (s *Server) Notify(c context.Context, r *pb.Result) (e *empty.Empty, err error) {
+func (s *Server) Notify(c context.Context, r *proto.Result) (e *empty.Empty, err error) {
 	s.result <- environment.Result{
 		Seed:    r.Seed,
 		Fitness: r.Fitness,

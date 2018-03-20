@@ -1,23 +1,23 @@
 package mlp
 
 import (
-	mlp_pb "github.com/cshenton/evolution/agent/mlp/pb"
-	server_pb "github.com/cshenton/evolution/server/pb"
+	mlp_proto "github.com/cshenton/evolution/agent/mlp/proto"
+	server_proto "github.com/cshenton/evolution/server/proto"
 	"github.com/golang/protobuf/ptypes"
 )
 
 // ToProto creates an agent proto from the given MLP.
-func (m *MLP) ToProto() (p *server_pb.Agent, err error) {
-	a := make([]mlp_pb.Activation, len(m.Activations))
+func (m *MLP) ToProto() (p *server_proto.Agent, err error) {
+	a := make([]mlp_proto.Activation, len(m.Activations))
 	for i := range a {
-		a[i] = mlp_pb.Activation(m.Activations[i])
+		a[i] = mlp_proto.Activation(m.Activations[i])
 	}
 	s := make([]int32, len(m.Sizes))
 	for i := range s {
 		s[i] = int32(m.Sizes[i])
 	}
 
-	mp := &mlp_pb.MLP{
+	mp := &mlp_proto.MLP{
 		Sizes:       s,
 		Activations: a,
 		Weights:     m.Weights,
@@ -27,15 +27,15 @@ func (m *MLP) ToProto() (p *server_pb.Agent, err error) {
 	if err != nil {
 		return nil, err
 	}
-	p = &server_pb.Agent{
+	p = &server_proto.Agent{
 		Message: any,
 	}
 	return p, nil
 }
 
 // FromProto set's the receiver MLPs weights and config from the provided proto.
-func (m *MLP) FromProto(p *server_pb.Agent) (err error) {
-	mp := &mlp_pb.MLP{}
+func (m *MLP) FromProto(p *server_proto.Agent) (err error) {
+	mp := &mlp_proto.MLP{}
 	err = ptypes.UnmarshalAny(p.Message, mp)
 	if err != nil {
 		return err
