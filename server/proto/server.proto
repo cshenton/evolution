@@ -5,7 +5,7 @@ import "google/protobuf/empty.proto";
 
 package evolution.server;
 
-option go_package = "pb";
+option go_package = "proto";
 
 // The evolution service is used to communicate fitnesses between servers.
 service Evolution {

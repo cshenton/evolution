@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package evolution.mlp;
 
-option go_package = "pb";
+option go_package = "proto";
 
 // Activation is a valid activation function
 enum Activation {

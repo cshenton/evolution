@@ -32,7 +32,7 @@ Protocol buffers are generated from `/protos` into their respective packages so
 from this folder:
 
 ```bash
-protoc -I protos/ protos/server.proto --go_out=plugins=grpc:server/pb
-protoc -I protos/ protos/mlp.proto --go_out=agent/mlp/pb
+protoc -I . server/proto/server.proto --go_out=plugins=grpc:.
+protoc -I . agent/mlp/proto/mlp.proto --go_out=.
 # etc... protoc -I protos/ protos/<agent_name>.proto --go_out=agent/<agent_name>/pb
 ```
