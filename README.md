@@ -1,8 +1,20 @@
 # OpenAI Evolution Strategies
 [![Build Status](https://travis-ci.org/cshenton/evolution.svg?branch=master)](https://travis-ci.org/cshenton/evolution)
-[![Coverage Status](https://coveralls.io/repos/github/cshenton/evolution/badge.svg?branch=master)](https://coveralls.io/github/cshenton/evolution?branch=master)
 
 Replication of the OpenAI [Evolution Strategies](https://blog.openai.com/evolution-strategies/) paper in Golang.
+
+
+## Roadmap
+
+- Online rank ordering (for 'generationless' ES)
+- **First Experiment:** Atari RAM (MLP)
+- Broaden Agent interface to accept nd-tensor input data
+- CNN agent
+- **Second Experiment:** Atari Pixels (CNN)
+- Agent methods for continuous policies
+- MuJoCo RPC server (like the one at [cshenton/atari-rpc](https://github.com/cshenton/atari-rpc))
+- **Third Experiment:** MuJoCo control
+
 
 ## Layout
 
@@ -24,15 +36,15 @@ The remaining packages use those interface types to implement a generic distribu
 
 ## Intra-cluster communication
 
-I use a homogenous network architecture, rather than a redis
-cluster. Each member of the cluster uses gossip to maintain a memberlist, then
+I use a homogenous network architecture. Each member of the cluster uses gossip to maintain a memberlist, then
 directly communicates over gRPC.
 
-Protocol buffers are generated from `/protos` into their respective packages so
-from this folder:
+Protocol buffers are generated from `/protos` into their respective packages so from this folder:
 
 ```bash
 protoc -I . server/proto/server.proto --go_out=plugins=grpc:.
 protoc -I . agent/mlp/proto/mlp.proto --go_out=.
+protoc -I ../atari-rpc/proto/ atari.proto --go_out=plugins=grpc:environment/atari/proto
+
 # etc... protoc -I protos/ protos/<agent_name>.proto --go_out=agent/<agent_name>/pb
 ```
