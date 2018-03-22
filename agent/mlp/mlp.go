@@ -72,7 +72,7 @@ func (m *MLP) activationFuncs() (f []ActivationFunc) {
 
 // Forward makes a forward pass through the MLP, sequentially multiplying by
 // each weight matrix and applying each activation.
-func (m *MLP) Forward(in []float64) (out []float64, err error) {
+func (m *MLP) Forward(in []float64, shp []int) (out []float64, err error) {
 	if len(in) != m.Sizes[0] {
 		err := fmt.Errorf("in must have length %v, but was length %v", m.Sizes[0], len(in))
 		return nil, err

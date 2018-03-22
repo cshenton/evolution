@@ -10,7 +10,7 @@ import (
 // Agent is an evolutionary learning agent.
 type Agent interface {
 	// Prediction and Evolution
-	Forward(in []float64) (out []float64, err error)
+	Forward(in []float64, shape []int) (out []float64, err error)
 	Perturb(s int64)
 	Update(s int64, f float64)
 

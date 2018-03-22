@@ -34,7 +34,7 @@ from this folder:
 ```bash
 protoc -I . server/proto/server.proto --go_out=plugins=grpc:.
 protoc -I . agent/mlp/proto/mlp.proto --go_out=.
-protoc -I ../atari-rpc/proto/ atari.proto --go_out=environment/atari/proto
+protoc -I ../atari-rpc/proto/ atari.proto --go_out=plugins=grpc:environment/atari/proto
 
 # etc... protoc -I protos/ protos/<agent_name>.proto --go_out=agent/<agent_name>/pb
 ```

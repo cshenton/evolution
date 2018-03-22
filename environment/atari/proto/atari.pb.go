@@ -19,6 +19,11 @@ import proto1 "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
 
+import (
+	context "golang.org/x/net/context"
+	grpc "google.golang.org/grpc"
+)
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto1.Marshal
 var _ = fmt.Errorf
@@ -378,6 +383,115 @@ func init() {
 	proto1.RegisterType((*State)(nil), "atari.State")
 	proto1.RegisterEnum("atari.GameType", GameType_name, GameType_value)
 	proto1.RegisterEnum("atari.Game", Game_name, Game_value)
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// Client API for Atari service
+
+type AtariClient interface {
+	// Start initialises and resets the environment.
+	Start(ctx context.Context, in *Environment, opts ...grpc.CallOption) (*Observation, error)
+	// Step applies the action to the active environment and returns the state.
+	Step(ctx context.Context, in *Action, opts ...grpc.CallOption) (*State, error)
+}
+
+type atariClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewAtariClient(cc *grpc.ClientConn) AtariClient {
+	return &atariClient{cc}
+}
+
+func (c *atariClient) Start(ctx context.Context, in *Environment, opts ...grpc.CallOption) (*Observation, error) {
+	out := new(Observation)
+	err := grpc.Invoke(ctx, "/atari.Atari/Start", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *atariClient) Step(ctx context.Context, in *Action, opts ...grpc.CallOption) (*State, error) {
+	out := new(State)
+	err := grpc.Invoke(ctx, "/atari.Atari/Step", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Server API for Atari service
+
+type AtariServer interface {
+	// Start initialises and resets the environment.
+	Start(context.Context, *Environment) (*Observation, error)
+	// Step applies the action to the active environment and returns the state.
+	Step(context.Context, *Action) (*State, error)
+}
+
+func RegisterAtariServer(s *grpc.Server, srv AtariServer) {
+	s.RegisterService(&_Atari_serviceDesc, srv)
+}
+
+func _Atari_Start_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Environment)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AtariServer).Start(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/atari.Atari/Start",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AtariServer).Start(ctx, req.(*Environment))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Atari_Step_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Action)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AtariServer).Step(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/atari.Atari/Step",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AtariServer).Step(ctx, req.(*Action))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Atari_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "atari.Atari",
+	HandlerType: (*AtariServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Start",
+			Handler:    _Atari_Start_Handler,
+		},
+		{
+			MethodName: "Step",
+			Handler:    _Atari_Step_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "atari.proto",
 }
 
 func init() { proto1.RegisterFile("atari.proto", fileDescriptor0) }
