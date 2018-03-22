@@ -2,12 +2,18 @@
 // a cshenton/atari rpc server to evaluate the provided agent.
 package atari
 
-import "github.com/cshenton/evolution/environment/atari/proto"
+import (
+	"context"
+
+	"github.com/cshenton/evolution/agent"
+	"github.com/cshenton/evolution/environment/atari/proto"
+	"google.golang.org/grpc"
+)
 
 // Env is the atari environment.
 type Env struct {
 	Environment *proto.Environment
-	Client   proto.AtariClient
+	Client      proto.AtariClient
 }
 
 // New connects to the specified atari rpc server and returns an Env.
@@ -18,23 +24,28 @@ func New(address string, env *proto.Environment) (e *Env, err error) {
 	}
 	e = &Env{
 		Environment: env,
-		Client: proto.NewAtariClient(conn)}
+		Client:      proto.NewAtariClient(conn)}
 	return e, nil
 }
-
 
 // Eval evaluates the provided agent against this environment.
 func (e *Env) Eval(a agent.Agent) (f float64) {
 	reward := 0.0
 	done := false
-	obs := e.Client.Start(e.Environment)
+	o, _ := e.Client.Start(context.Background(), e.Environment)
+	obs := make([]float64, len(o.Values))
+	for i := range obs {
+		obs[i] = float64(o.Values[i])
+	}
 
 	for !done {
-		action := agent.SampleDiscrete(a.Forward(...obs))
-		state := e.client.Step(action)
+		action, _ := agent.DiscreteAction(a, obs)
+		state, _ := e.Client.Step(context.Background(), &proto.Action{Value: uint32(action)})
 
-		obs = state.Observation
-		reward += state.Reward
+		for i := range obs {
+			obs[i] = float64(state.Observation.Values[i])
+		}
+		reward += float64(state.Reward)
 		done = state.Done
 	}
 	return reward

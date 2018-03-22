@@ -3,8 +3,8 @@ package agent
 import "math/rand"
 
 // DiscreteAction foo
-func DiscreteAction(a Agent, vals []float64, shp []int) (act int, err error) {
-	probs, err := a.Forward(vals, shp)
+func DiscreteAction(a Agent, vals []float64) (act int, err error) {
+	probs, err := a.Forward(vals)
 	if err != nil {
 		return 0, err
 	}
