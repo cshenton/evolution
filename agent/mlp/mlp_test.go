@@ -111,7 +111,7 @@ func TestMLPForward(t *testing.T) {
 		t.Fatalf("expected error in New: %v", err)
 	}
 
-	out, err := m.Forward([]float64{5, 3, 2, 4, 2})
+	out, err := m.Forward([]float64{5, 3, 2, 4, 2}, []int{5})
 	if err != nil {
 		t.Errorf("unexpected error in Forward: %v", err)
 	}
@@ -136,7 +136,7 @@ func TestMLPForwardErrs(t *testing.T) {
 		t.Fatalf("expected error in New: %v", err)
 	}
 
-	out, err := m.Forward([]float64{5, 3, 2, 4})
+	out, err := m.Forward([]float64{5, 3, 2, 4}, []int{4})
 	if err == nil {
 		t.Error("expected error in Forward, but it was nil")
 	}
