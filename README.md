@@ -6,7 +6,7 @@ Replication of the OpenAI [Evolution Strategies](https://blog.openai.com/evoluti
 
 ## Roadmap
 
-- Online rank ordering (for 'generationless' ES)
+- Build out [stand-alone API for black box optimisers](https://github.com/cshenton/opt)
 - **First Experiment:** Atari RAM (MLP)
 - Broaden Agent interface to accept nd-tensor input data
 - CNN agent
